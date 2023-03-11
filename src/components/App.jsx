@@ -21,9 +21,7 @@ export const App = () => {
       <ContactForm></ContactForm>
       <h2>Contacts</h2>
       <Filter filter={filter}></Filter>
-      <ContactList
-        filter={filter}
-      ></ContactList>
+      <ContactList></ContactList>
       {/* {contacts.length !== 0 && (
         <ContactList
           deleteContact={deleteContact}
