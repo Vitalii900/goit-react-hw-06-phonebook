@@ -1,34 +1,31 @@
 import '../ContactList/ContactList.css';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import { removeContact } from '../redux/store';
 
-export function ContactList({ filter, contacts, deleteContact }) {
-  const visibleContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
+export function ContactList() {
+  const dispatch = useDispatch();
+  const arrayOfContacts = useSelector(state => state.contacts);
+  const valueOfFilter = useSelector(state => state.filter);
+  const visibleContacts = arrayOfContacts.filter(contact =>
+    contact.name.toLowerCase().includes(valueOfFilter.toLowerCase())
   );
   return (
     <ul className='list'>
       {visibleContacts.map(contact => {
         return (
-          <li className='item' key={contact.id}>
-            <p className='contact'>
+          <li className="item" key={contact.id}>
+            <p className="contact">
               {contact.name}: {contact.number}
             </p>
-            <button className='deleteButton' onClick={() => deleteContact(contact.id)}>Delete</button>
+            <button
+              className="deleteButton"
+              onClick={() => dispatch(removeContact(contact.id))}
+            >
+              Delete
+            </button>
           </li>
         );
       })}
     </ul>
   );
 }
-
-ContactList.propTypes = {
-  filter: PropTypes.string.isRequired,
-  deleteContact: PropTypes.func.isRequired,
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-      number: PropTypes.string,
-    })
-  ),
-};

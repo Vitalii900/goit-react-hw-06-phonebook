@@ -1,11 +1,19 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+// import PropTypes from 'prop-types';
 import '../ContactForm/ContactForm.css';
+import { addContact } from '../redux/store';
 
 
-export const ContactForm = ({onSubmit}) => {
+export const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('')
+
+  const dispatch = useDispatch();
+  const arrayOfContacts = useSelector(state => state.contacts);
+  const findRepeateName = arrayOfContacts.find(contact => {
+    return contact.name.includes(name);
+  });
 
   const handleInputChange = event => {
     const { name, value } = event.currentTarget;
@@ -24,7 +32,11 @@ export const ContactForm = ({onSubmit}) => {
 
   const sendData = event => {
     event.preventDefault();
-    onSubmit(name, number)
+    if (findRepeateName) {
+      alert(`${findRepeateName.name} is already in contacts`);
+      return;
+    }
+    dispatch(addContact({name, number}));
     reset();
   };
 
@@ -68,6 +80,6 @@ export const ContactForm = ({onSubmit}) => {
     );
 }
 
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-};
+// ContactForm.propTypes = {
+//   onSubmit: PropTypes.func.isRequired,
+// };
