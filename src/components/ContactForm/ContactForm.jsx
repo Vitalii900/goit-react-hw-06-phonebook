@@ -9,8 +9,10 @@ export const ContactForm = () => {
   const [number, setNumber] = useState('')
 
   const dispatch = useDispatch();
-  const arrayOfContacts = useSelector(state => state.contacts);
+  const arrayOfContacts = useSelector(state => state.contacts.array);
+  // console.log(arrayOfContacts);
   const findRepeateName = arrayOfContacts.find(contact => {
+    console.log(name);
     return contact.name.includes(name);
   });
 
