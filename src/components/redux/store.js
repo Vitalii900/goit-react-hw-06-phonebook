@@ -1,6 +1,15 @@
 import {configureStore, createSlice} from '@reduxjs/toolkit';
 import { nanoid } from 'nanoid';
-import { persistStore, persistReducer } from 'redux-persist'
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
 import storage from 'redux-persist/lib/storage'
 
 const myContactsReducerSlice = createSlice({
@@ -8,7 +17,6 @@ const myContactsReducerSlice = createSlice({
   initialState: {array: []},
   reducers: {
     addContact(state, action) {
-      // console.log(state);
       const contactId = nanoid();
       return {array: [
         ...state.array,
@@ -19,7 +27,7 @@ const myContactsReducerSlice = createSlice({
         },
       ]}
     },
-    removeContact(state, action) { return { array: [state.array.filter(state => state.id !== action.payload)]}}
+    removeContact(state, action) { return { array: state.array.filter(state => state.id !== action.payload)}}
   },
 });
 
@@ -51,6 +59,13 @@ export const store = configureStore({
   reducer: {
     contacts: persistedReducer,
     filter: myFilterSlice.reducer,
+  },
+  middleware(getDefaultMiddleware) {
+    return getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    });
   },
 });
 
